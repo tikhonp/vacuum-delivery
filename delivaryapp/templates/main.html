@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Главная{% endblock %}
+
+{% block nav %}
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="login/">Войти</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="register/">Регистрация</a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block body %}
+<h1>Привет!</h1>
+<p>Это сервис для доставки еды по квартире, если хочешь что-то закказать авторизируйся</p>
+
+{#<img src="{% static 'robotBackImage.jpg' %}" alt="ну вот, картинка не загрузилась">#}
+{% endblock %}

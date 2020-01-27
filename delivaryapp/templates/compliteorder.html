@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Завершить Заказ | {{ user }}{% endblock %}
+
+{% block nav %}
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Вы вошли, как {{ user }} ({{ username }})</a>
+  </li>
+</ul>
+<a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Выйти</a>
+{% endblock %}
+
+{% block body %}
+<h1>Завершение заказа</h1>
+<p>Заказчик - {{ o.author.first_name }}</p>
+<p>Назначение - {{ o.place }}</p>
+<p></p>
+<p>{{ o.description }}</p>
+<p><a href="sendorder?order={{ o.id }}">Отправить Заказ</a></p>
+<p><a href="cancel/">Отмена (НЕ РАБОТАЕТ СЕЙЧАС)</a></p>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Добавить Заказ | {{ user }}{% endblock %}
+
+{% block nav %}
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Вы вошли, как {{ user }} ({{ username }})</a>
+  </li>
+</ul>
+<a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Выйти</a>
+{% endblock %}
+
+{% block body %}
+<h1>Добавление заказа</h1>
+<p></p>
+<form method="POST" name="order">
+  {% csrf_token %}
+  <div class="input-group">
+    <select class="custom-select" id="inputGroupSelect04" name="place" type="text">
+      <option value="0" selected>Выберите расположение</option>
+      {% for p, i in def_places.items %}
+      <option value="{{ i }}">{{ p }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <p></p>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Описание</label>
+    <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+  <p></p>
+  <div class="form-group" method="POST">
+    <input name="ordersubmit" type="submit" class="form-control" id="exampleInputEmail1" aria-describedby="submitHelp" value="Добавить">
+  </div>
+</form>
+<p></p>
+<a href="/">
+  < назад</a> {% endblock %} {% block scripts %} <script>
+    var seloption = "{{ up }}";
+    </script>
+    <script src="{% static 'scripts/addorder.js' %}"></script>
+    {% endblock %}

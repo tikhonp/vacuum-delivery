@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# all DS_Store
+.DS_Store*
+
+# jupyter notebook
+notes.ipynb

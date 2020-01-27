@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Профиль | {{ user }}{% endblock %}
+
+{% block nav %}
+
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Вы вошли, как {{ user }} ({{ username }})</a>
+  </li>
+</ul>
+<a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Выйти</a>
+{% endblock %}
+
+{% block body %}
+<h1>Профиль</h1>
+<p></p>
+<form method="POST" name="privdata">
+  {% csrf_token %}
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Имя и Фамилия</span>
+    </div>
+    <input name="FirstName" type="text" aria-label="First name" class="form-control" value="{{ user }}" placeholder="имя не добавлено">
+    <input name="LastName" type="text" aria-label="Last name" class="form-control" value="{{ last_name }}" placeholder="фамилия не добавлена">
+  </div>
+  <p></p>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">Имя Пользователя</span>
+    </div>
+    <input name="username" type="text" class="form-control" placeholder="имя пользователя не добавлено" aria-label="Имя пользователя" aria-describedby="basic-addon1" value="{{ username }}">
+  </div>
+  <p></p>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">Email</span>
+    </div>
+    <input name="email" type="text" class="form-control" placeholder="Email не добавлен" aria-label="email" aria-describedby="basic-addon1" value="{{ email }}">
+  </div>
+  <p></p>
+  <div class="form-group" method="POST">
+    <input name="pdatasubm" type="submit" class="form-control" id="exampleInputEmail1" aria-describedby="submitHelp" value="Сохранить">
+  </div>
+</form>
+<p></p>
+<p>Последний раз вы заходили {{ last_login }}</p>
+<p></p>
+{% if messages %}
+<ul>
+  {% for message in messages %}
+  <div class="alert alert-danger" role="alert">
+    {{ message }}
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+<form method="POST" name="places">
+  {% csrf_token %}
+  <div class="input-group">
+    <select class="custom-select" id="inputGroupSelect04" name="place" type="text">
+      <option value="0" selected>Выберите расположение по умолчанию</option>
+      {% for p, i in def_places.items %}
+      <option value="{{ i }}" >{{ p }}</option>
+      {% endfor %}
+    </select>
+    <div class="input-group-append">
+      <input name="setplace" type="submit" class="btn btn-outline-secondary" type="button" value="Выбрать"></input>
+    </div>
+  </div>
+</form>
+<p></p>
+<a href="/">< назад</a>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  var seloption = "{{ up }}";
+</script>
+<script src="{% static 'scripts/profile.js' %}"></script>
+{% endblock %}

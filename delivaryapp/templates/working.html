@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Главная | {{ user }} | Исполнитель{% endblock %}
+
+{% block nav %}
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Вы вошли, как {{ user }} ({{ username }})</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="addorder/">Добавить Заказ</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="stop/">Закончить Работу</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="profile/">Профиль</a>
+  </li>
+</ul>
+<a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Выйти</a>
+{% endblock %}
+
+{% block body %}
+<h1>Заказы</h1>
+<p></p>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#activo" role="tab" aria-controls="home" aria-selected="true">Доступные Заказы</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#workingo" role="tab" aria-controls="profile" aria-selected="false">Взятые на Выполнение</a>
+  </li>
+</ul>
+<p></p>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="activo" role="tabpanel" aria-labelledby="home-tab">
+    {% for o in activeOrders %}
+    <div class="card">
+      <div class="card-header">
+        {{ o.date }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Доставка - {{ o.place }}</h5>
+        <p class="card-text">{{ o.description }}</p>
+        <a href="getorder?order={{ o.id }}" class="btn btn-primary">Взять</a>
+      </div>
+    </div>
+    <p></p>
+    {% endfor %}
+  </div>
+  <div class="tab-pane fade show active" id="workingo" role="tabpanel" aria-labelledby="home-tab">
+    {% for o in workingOrders %}
+    <div class="card">
+      <div class="card-header">
+        {{ o.date }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Доставка - {{ o.place }}</h5>
+        <p class="card-text">{{ o.description }}</p>
+        <a href="compliteorder?order={{ o.id }}" class="btn btn-primary">Выполнить</a>
+      </div>
+    </div>
+    <p></p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
