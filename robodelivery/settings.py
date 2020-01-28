@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'tikhon.zapto.org',
-    '127.0.0.1'
+    '127.0.0.1',
+    '10.0.1.5'
 ]
 
 

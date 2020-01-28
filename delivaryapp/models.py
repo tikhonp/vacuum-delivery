@@ -6,7 +6,7 @@ import datetime
 class userplaces(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(("Date"), default=datetime.date.today)
-    place = models.CharField(max_length=3)
+    place = models.CharField(max_length=3, default=0)
     is_active = models.BooleanField(default=False)
 
 

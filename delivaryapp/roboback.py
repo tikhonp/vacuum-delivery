@@ -1,8 +1,9 @@
 import miio
 from time import sleep
 
-def_places = {'Детская': 1, 'Гостинная': 2, 'Спальня': 3}
-tokens = {'ip': '10.0.1.90', 'token': '4235367130463973624e694962434263'}
+def_places = {'Детская': 1, 'Гостинная': 2, 'Спальня': 3, 'Кухня': 4}
+tokens = {'ip': '10.0.1.90', 'token': '850a90fa537738678e016a7c94e2686722c71448'}
+terget_positions = {1: (28000, 24000), 4: (21800, 25000)}
 
 
 class robocontrol:
@@ -17,18 +18,29 @@ class robocontrol:
     def connect(self):
         self.v = miio.vacuum.Vacuum(self.ip, token=self.token, start_id=0)
 
+    def gohome(self):
+        try:
+            self.v.home()
+        except:
+            self.connect()
+
     def addtasks(self, destX, destY, id):
         self.tasks[id] = {'destX': destX, 'destY': destY,
                           'is_active': False, 'is_complite': False}
 
     def runtask(self, task_id):
-        self.tasks[task_id]['is_active'] = True
-        self.v.goto(self.tasks[task_id]['destX'], self.tasks[task_id]['destX'])
-        while self.v.status().state:  # !!!!!!!!!!!!!!!!
-            sleep(2)
-        self.tasks[task_id]['is_active'] = False
-        self.tasks[task_id]['is_complite'] = False
-        return True
+        try:
+            self.tasks[task_id]['is_active'] = True
+            self.v.goto(self.tasks[task_id]['destX'],
+                        self.tasks[task_id]['destX'])
+            while self.v.status().state == 'Going to target':  # !!!!!!!!!!!!!!!!
+                sleep(2)
+            self.tasks[task_id]['is_active'] = False
+            self.tasks[task_id]['is_complite'] = False
+            return 'ok'
+        except Exception as e:
+            self.connect()
+            return e.message
 
     def main(self):
         try:

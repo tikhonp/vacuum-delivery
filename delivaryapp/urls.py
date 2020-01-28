@@ -17,5 +17,5 @@ urlpatterns = [
     path('authed/working/compliteorder/', views.compliteorderp, name='compliteorderp'),
     path('authed/working/compliteorder/sendorder/', views.sendorderp, name='sendorderp'),
     path('authed/working/compliteorder/cancel/', views.cancelsendingp, name='cancelsendingp'),
-    path('authed/getorder/', views.getorderp, name='getorderp'),
+    path('authed/getorder/', views.authgetorderp, name='authgetorderp'),
 ]

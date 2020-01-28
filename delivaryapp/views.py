@@ -6,8 +6,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from delivaryapp.models import userplaces, orders
 from . import roboback
 from threading import Thread
+from time import time
 
 def_places = roboback.def_places
+terget_positions = roboback.terget_positions
 robot = roboback.robocontrol()
 # process = Thread(target=robot.main(), args=[])
 # process.start()
@@ -164,10 +166,13 @@ def workingp(request):
                 up.author = request.user
                 up.place = 0
                 up.is_active = True
+                up.place = 4
                 up.save()
             else:
                 up = up[0]
                 if not up.is_active:
+                    if up.place == 0:
+                        up.place = 4
                     up.is_active = True
                     up.save()
 
@@ -230,9 +235,16 @@ def getorderp(request):
 
 
 def compliteorderp(request):
+    global terget_positions
     order_id = int(request.GET['order'])
     o = orders.objects.get(id=order_id)
-    # код для вызова пылесоса
+    up = userplaces.objects.get(author=request.user)
+    p = int(up.place)
+    id = hash(time())
+    robot.addtasks(terget_positions[p][0], terget_positions[p][1], id)
+    out = robot.runtask(id)
+    if not out=='ok':
+        print(out)
     params = {'username': request.user.username,
               'user': request.user.first_name, 'o': o}
     return render(request, 'compliteorder.html', params)
@@ -242,7 +254,11 @@ def sendorderp(request):
     order_id = int(request.GET['order'])
     o = orders.objects.get(id=order_id)
     place = o.place
-    # вызов пылесоса
+    id = hash(time())
+    robot.addtasks(terget_positions[place][0], terget_positions[place][1], id)
+    out = robot.runtask(id)
+    if not out=='ok':
+        print(out)
     o.is_active = False
     o.is_closed = False
     o.save()
@@ -250,14 +266,14 @@ def sendorderp(request):
 
 
 def cancelsendingp(request):
-    # отмена вызова пылесоса
-    pass
+    robot.gohome()
+    return redirect('/authed/working/')
 
 
-def getorderp(request):
+def authgetorderp(request):
     order_id = int(request.GET['order'])
     o = orders.objects.get(id=order_id)
-    # пылесос на базу
+    robot.gohome()
     o.is_closed = True
     o.save()
     return redirect('/authed')
