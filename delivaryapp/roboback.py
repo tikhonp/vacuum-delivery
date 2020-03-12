@@ -2,7 +2,7 @@ import miio
 from time import sleep
 
 def_places = {'Детская': 1, 'Гостинная': 2, 'Спальня': 3, 'Кухня': 4}
-tokens = {'ip': '10.0.1.90', 'token': '850a90fa537738678e016a7c94e2686722c71448'}
+tokens = {'ip': '10.0.1.90', 'token': '4235367130463973624e694962434263'}
 terget_positions = {1: (28000, 24000), 4: (21800, 25000)}
 
 
@@ -40,7 +40,7 @@ class robocontrol:
             return 'ok'
         except Exception as e:
             self.connect()
-            return e.message
+            return e
 
     def main(self):
         try:
@@ -58,3 +58,6 @@ class robocontrol:
         except Exception as e:
             self.errors.append(e)
             self.main()
+
+    def gettasks(self):
+        return self.tasks

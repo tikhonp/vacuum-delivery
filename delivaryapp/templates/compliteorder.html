@@ -15,9 +15,9 @@
 {% block body %}
 <h1>Завершение заказа</h1>
 <p>Заказчик - {{ o.author.first_name }}</p>
-<p>Назначение - {{ o.place }}</p>
+<p>Назначение - {{ placename }}</p>
 <p></p>
 <p>{{ o.description }}</p>
 <p><a href="sendorder?order={{ o.id }}">Отправить Заказ</a></p>
-<p><a href="cancel/">Отмена (НЕ РАБОТАЕТ СЕЙЧАС)</a></p>
+<p><a href="cancel/">Отмена</a></p>
 {% endblock %}

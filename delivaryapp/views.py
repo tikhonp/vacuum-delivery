@@ -235,29 +235,35 @@ def getorderp(request):
 
 
 def compliteorderp(request):
-    global terget_positions
+    global terget_positions, def_places
     order_id = int(request.GET['order'])
     o = orders.objects.get(id=order_id)
     up = userplaces.objects.get(author=request.user)
     p = int(up.place)
     id = hash(time())
-    robot.addtasks(terget_positions[p][0], terget_positions[p][1], id)
+    x, y = terget_positions[p][0], terget_positions[p][1]
+    print(x, y)
+    robot.addtasks(x, y, id)
     out = robot.runtask(id)
-    if not out=='ok':
+    if not out == 'ok':
         print(out)
+    placename = list(def_places.keys())[list(def_places.values()).index(p)]
     params = {'username': request.user.username,
-              'user': request.user.first_name, 'o': o}
+              'user': request.user.first_name, 'o': o, 'placename': placename}
     return render(request, 'compliteorder.html', params)
 
 
 def sendorderp(request):
+    global terget_positions
     order_id = int(request.GET['order'])
     o = orders.objects.get(id=order_id)
     place = o.place
     id = hash(time())
-    robot.addtasks(terget_positions[place][0], terget_positions[place][1], id)
+    x, y = terget_positions[int(place)][0], terget_positions[int(place)][1]
+    print(x, y)
+    robot.addtasks(x, y, id)
     out = robot.runtask(id)
-    if not out=='ok':
+    if not out == 'ok':
         print(out)
     o.is_active = False
     o.is_closed = False
@@ -281,5 +287,5 @@ def authgetorderp(request):
 
 def testp(request):
     # o = orders.objects.get(id=3)
-    out = str(user.objects.values())
+    out = str(robot.gettasks())
     return HttpResponse(out)

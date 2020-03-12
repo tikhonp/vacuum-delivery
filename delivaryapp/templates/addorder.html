@@ -37,7 +37,9 @@
 </form>
 <p></p>
 <a href="/">
-  < назад</a> {% endblock %} {% block scripts %} <script>
+  < назад</a> {% endblock %}
+
+{% block scripts %} <script>
     var seloption = "{{ up }}";
     </script>
     <script src="{% static 'scripts/addorder.js' %}"></script>

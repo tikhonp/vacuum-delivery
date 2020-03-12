@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block body %}
+<p></p>
 <h1>Профиль</h1>
 <p></p>
 <form method="POST" name="privdata">
@@ -62,7 +63,7 @@
     <select class="custom-select" id="inputGroupSelect04" name="place" type="text">
       <option value="0" selected>Выберите расположение по умолчанию</option>
       {% for p, i in def_places.items %}
-      <option value="{{ i }}" >{{ p }}</option>
+      <option value="{{ i }}">{{ p }}</option>
       {% endfor %}
     </select>
     <div class="input-group-append">
@@ -71,12 +72,9 @@
   </div>
 </form>
 <p></p>
-<a href="/">< назад</a>
-{% endblock %}
-
-{% block scripts %}
-<script>
-  var seloption = "{{ up }}";
-</script>
-<script src="{% static 'scripts/profile.js' %}"></script>
-{% endblock %}
+<a href="/">
+  < назад</a> {% endblock %} {% block scripts %} <script>
+    var seloption = "{{ up }}";
+    </script>
+    <script src="{% static 'scripts/profile.js' %}"></script>
+    {% endblock %}
