@@ -32,7 +32,7 @@ class robocontrol:
         try:
             self.tasks[task_id]['is_active'] = True
             self.v.goto(self.tasks[task_id]['destX'],
-                        self.tasks[task_id]['destX'])
+                        self.tasks[task_id]['destY'])
             while self.v.status().state == 'Going to target':  # !!!!!!!!!!!!!!!!
                 sleep(2)
             self.tasks[task_id]['is_active'] = False
