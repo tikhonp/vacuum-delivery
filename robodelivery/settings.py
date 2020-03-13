@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'delivaryapp'
+    'delivaryapp',
+    'rest_framework',
+    'restapi',
 ]
 
 MIDDLEWARE = [
