@@ -1,9 +1,7 @@
 import miio
 from time import sleep
-
-def_places = {'Детская': 1, 'Гостинная': 2, 'Спальня': 3, 'Кухня': 4}
-tokens = {'ip': '10.0.1.90', 'token': '4235367130463973624e694962434263'}
-terget_positions = {1: (28000, 24000), 4: (21800, 25000)}
+import json
+from .config import def_places, tokens, terget_positions
 
 
 class robocontrol:

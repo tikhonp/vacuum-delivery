@@ -7,6 +7,7 @@ from delivaryapp.models import userplaces, orders
 from . import roboback
 from threading import Thread
 from time import time
+from .config import Kitchen
 
 def_places = roboback.def_places
 terget_positions = roboback.terget_positions
@@ -166,13 +167,13 @@ def workingp(request):
                 up.author = request.user
                 up.place = 0
                 up.is_active = True
-                up.place = 4
+                up.place = Kitchen
                 up.save()
             else:
                 up = up[0]
                 if not up.is_active:
                     if up.place == 0:
-                        up.place = 4
+                        up.place = Kitchen
                     up.is_active = True
                     up.save()
 
