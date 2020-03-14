@@ -4,6 +4,7 @@
 - Added support for DubleDom
 - Added requpments for pip (req.txt)
 - Added favicon.ico
+- Added all points for DublDom
 
 
 
