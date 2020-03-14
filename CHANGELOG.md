@@ -3,6 +3,8 @@
 - Added config for supporting multiple flats (There is in "/deliveryapp/config.py")
 - Added support for DubleDom
 - Added requpments for pip (req.txt)
+- Added favicon.ico
+
 
 
 ## 0.2.0 Added rest api
