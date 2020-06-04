@@ -1,18 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import User
-import datetime
+from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 
-class userplaces(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField(("Date"), default=datetime.date.today)
+class UserPlaces(models.Model):
+    author = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, primary_key=True)
+    date = models.DateField(("Date"), default=timezone.now)
     place = models.CharField(max_length=3, default=0)
     is_active = models.BooleanField(default=False)
 
 
-class orders(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField(("Date"), default=datetime.date.today)
+class Orders(models.Model):
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    date = models.DateField(("Date"), default=timezone.now)
     description = models.TextField()
     place = models.CharField(max_length=3)
     is_active = models.BooleanField(default=False)

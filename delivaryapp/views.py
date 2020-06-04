@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
-from delivaryapp.models import userplaces, orders
+from delivaryapp.models import UserPlaces, Orders
 from . import roboback
 from threading import Thread
 from time import time
@@ -89,17 +89,18 @@ def registerp(request):
 
 
 def authedp(request):
+    global def_places
     if request.user.is_authenticated:
         if request.method == 'GET':
-            up = userplaces.objects.filter(author=request.user)
+            up = UserPlaces.objects.filter(author=request.user)
             if len(up) != 0 and up[0].is_active == True:
                 return redirect('/authed/working/')
             else:
-                Orders = orders.objects.filter(author=request.user)
-                activeOrders = Orders.filter(is_closed=False)
-                closedOrders = Orders.filter(is_closed=True)
+                orders = Orders.objects.filter(author=request.user)
+                activeOrders = orders.filter(is_closed=False)
+                closedOrders = orders.filter(is_closed=True)
                 parms = {'username': request.user.username,
-                         'user': request.user.first_name, 'activeOrders': activeOrders, 'closedOrders': closedOrders}
+                         'user': request.user.first_name, 'activeOrders': activeOrders, 'closedOrders': closedOrders, 'def_places': def_places}
                 return render(request, 'authed.html', parms)
     else:
         return redirect('/')
@@ -115,7 +116,7 @@ def profilep(request):
     global def_places
     if request.user.is_authenticated:
         if request.method == 'GET':
-            up = userplaces.objects.filter(author=request.user)
+            up = UserPlaces.objects.filter(author=request.user)
             if len(up) == 0:
                 up = 0
             else:
@@ -129,9 +130,9 @@ def profilep(request):
                 if place == 0:
                     messages.error(request, 'Вы не выбрали комнату')
                 else:
-                    up = userplaces.objects.filter(author=request.user)
+                    up = UserPlaces.objects.filter(author=request.user)
                     if len(up) == 0:
-                        up = userplaces()
+                        up = UserPlaces()
                         up.author = request.user
                         up.place = place
                         up.is_active = False
@@ -161,9 +162,9 @@ def profilep(request):
 def workingp(request):
     if request.user.is_authenticated:
         if request.method == 'GET':
-            up = userplaces.objects.filter(author=request.user)
+            up = UserPlaces.objects.filter(author=request.user)
             if len(up) == 0:
-                up = userplaces()
+                up = UserPlaces()
                 up.author = request.user
                 up.place = 0
                 up.is_active = True
@@ -177,11 +178,11 @@ def workingp(request):
                     up.is_active = True
                     up.save()
 
-            Orders = orders.objects.filter(is_closed=False)
-            activeOrders = Orders.filter(is_active=False)
-            workingOrders = Orders.filter(wuser=request.user.username)
+            orders = Orders.objects.filter(is_closed=False)
+            activeOrders = orders.filter(is_active=False)
+            workingOrders = orders.filter(wuser=request.user.username)
             parms = {'username': request.user.username,
-                     'user': request.user.first_name, 'activeOrders': activeOrders, 'workingOrders': workingOrders}
+                     'user': request.user.first_name, 'activeOrders': activeOrders, 'workingOrders': workingOrders, 'aolenth': len(activeOrders)}
             return render(request, 'working.html', parms)
     else:
         return redirect('/')
@@ -191,7 +192,7 @@ def addorderp(request):
     global def_places
     if request.user.is_authenticated:
         if request.method == 'GET':
-            up = userplaces.objects.filter(author=request.user)
+            up = UserPlaces.objects.filter(author=request.user)
             if len(up) == 0:
                 up = 0
             else:
@@ -203,7 +204,7 @@ def addorderp(request):
             place = request.POST.get('place', '')
             description = request.POST.get('description', '')
 
-            order = orders()
+            order = Orders()
             order.author = request.user
             order.place = place
             order.description = description
@@ -214,12 +215,12 @@ def addorderp(request):
 
 
 def stopworkingp(request):
-    o = orders.objects.filter(is_active=True)
+    o = Orders.objects.filter(is_active=True)
     for i in o:
-        if o.wuser == request.user.username:
-            o.wuser = 'None'
-            o.is_active = False
-    up = userplaces.objects.filter(author=request.user)
+        if i.wuser == request.user.username:
+            i.wuser = 'None'
+            i.is_active = False
+    up = UserPlaces.objects.filter(author=request.user)
     up = up[0]
     up.is_active = False
     up.save()
@@ -228,7 +229,7 @@ def stopworkingp(request):
 
 def getorderp(request):
     order_id = int(request.GET['order'])
-    o = orders.objects.get(id=order_id)
+    o = Orders.objects.get(id=order_id)
     o.is_active = True
     o.wuser = request.user.username
     o.save()
@@ -238,8 +239,8 @@ def getorderp(request):
 def compliteorderp(request):
     global terget_positions, def_places
     order_id = int(request.GET['order'])
-    o = orders.objects.get(id=order_id)
-    up = userplaces.objects.get(author=request.user)
+    o = Orders.objects.get(id=order_id)
+    up = UserPlaces.objects.get(author=request.user)
     p = int(up.place)
     id = hash(time())
     x, y = terget_positions[p][0], terget_positions[p][1]
@@ -257,7 +258,7 @@ def compliteorderp(request):
 def sendorderp(request):
     global terget_positions
     order_id = int(request.GET['order'])
-    o = orders.objects.get(id=order_id)
+    o = Orders.objects.get(id=order_id)
     place = o.place
     id = hash(time())
     x, y = terget_positions[int(place)][0], terget_positions[int(place)][1]
@@ -279,7 +280,7 @@ def cancelsendingp(request):
 
 def authgetorderp(request):
     order_id = int(request.GET['order'])
-    o = orders.objects.get(id=order_id)
+    o = Orders.objects.get(id=order_id)
     robot.gohome()
     o.is_closed = True
     o.save()
@@ -287,6 +288,6 @@ def authgetorderp(request):
 
 
 def testp(request):
-    # o = orders.objects.get(id=3)
+    # o = Orders.objects.get(id=3)
     out = str(robot.gettasks())
     return HttpResponse(out)

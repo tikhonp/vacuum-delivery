@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Главная | {{ user }}{% endblock %}
 
 {% block nav %}
@@ -36,14 +38,12 @@
   <div class="tab-pane fade show active" id="activo" role="tabpanel" aria-labelledby="home-tab">
     <p></p>
     {% for o in activeOrders %}
-    <div {% if o.is_active %}class="card border-info mb-3" {% else %}class="card" {% endif %}>
-      <div class="card-header">
-        {% if o.is_active %}Выполняется{% else %}Добавлен{% endif %}
-      </div>
+    <div {% if o.is_active %}class="card border-info mb-3" {% else %}class="card"{% endif %}id="order{{ o.id }}">
+      <div id="header_order{{ o.id }}" class="card-header">{% if o.is_active %}Выполняется{% else %}Добавлен{% endif %}</div>
       <div class="card-body">
-        <h5 class="card-title">Доставка - {{ o.place }}</h5>
+        <h5 class="card-title">Доставка - <i>Название места</i></h5>
         <p class="card-text">{{ o.description }}</p>
-        {% if not o.is_active %}
+        {% if not o.is_active and o.Wuser == "None" %}
         <a href="getorder?order={{ o.id }}" class="btn btn-primary">Я забрал заказ</a>
         {% endif %}
       </div>
@@ -67,4 +67,11 @@
     {% endfor %}
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script charset="utf-8">
+  ActiveOrders = [{% for i in activeOrders %}"{{ i.id }}", {% endfor %}]
+</script>
+<script src="{% static 'scripts/main.js' %}"></script>
 {% endblock %}

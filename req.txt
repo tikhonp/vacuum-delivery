@@ -1,5 +1,3 @@
 python-miio
 django
-markdown
 djangorestframework
-django-filter

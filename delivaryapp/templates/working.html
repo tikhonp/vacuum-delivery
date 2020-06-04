@@ -46,7 +46,7 @@
     <p></p>
     {% endfor %}
   </div>
-  <div class="tab-pane fade show active" id="workingo" role="tabpanel" aria-labelledby="home-tab">
+  <div class="tab-pane fade" id="workingo" role="tabpanel" aria-labelledby="home-tab">
     {% for o in workingOrders %}
     <div class="card">
       <div class="card-header">
@@ -63,4 +63,31 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script charset="utf-8">
+  var aol = {{ aolenth }};
+  
+ 
+  function checkl() {
+ var xhr = new XMLHttpRequest();
+				xhr.open('GET', `http://127.0.0.1:8000/api/v1/orders/active/len/`, false);
+
+  xhr.send();
+				
+				if (xhr.status != 200) {
+					console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`);
+				}
+else {
+  var response = JSON.parse(xhr.responseText);
+  if (response.aolenth != aol) {
+  window.location.reload(false);
+}
+}
+}
+
+
+setInterval(checkl, 2000);
+</script>
 {% endblock %}
