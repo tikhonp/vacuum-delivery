@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('delivaryapp.urls')),
     path('api/v1/', include('api.urls')),
+    path('api/v2/', include('apiv2.urls')),
 ]

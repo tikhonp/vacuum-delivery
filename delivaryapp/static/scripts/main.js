@@ -2,7 +2,7 @@ function updatestatus() {
 		for (i in ActiveOrders) {
 				var xhr = new XMLHttpRequest();
 
-				xhr.open('GET', `http://127.0.0.1:8000/api/v1/order/${ActiveOrders[i]}/`, false);
+				xhr.open('GET', `http://192.168.31.208:8000/api/v1/order/${ActiveOrders[i]}/`, false);
 				xhr.send();
 				
 				if (xhr.status != 200) {
